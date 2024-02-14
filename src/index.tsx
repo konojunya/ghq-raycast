@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { List, getPreferenceValues } from "@raycast/api";
+import { Action, ActionPanel, List, getPreferenceValues } from "@raycast/api";
 import { fetchGHQList } from "./ghq";
+import { launchVSCode } from "./vscode";
 
 export default function Command() {
   const preferences = getPreferenceValues<{ GHQ_ROOT_PATH: string }>();
@@ -17,6 +18,19 @@ export default function Command() {
     [paths],
   );
 
+  const handleAction = useCallback(
+    async (index: number) => {
+      const projectPath = `${preferences.GHQ_ROOT_PATH}/${paths[index]}`;
+
+      try {
+        await launchVSCode(projectPath);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [paths],
+  );
+
   useEffect(() => {
     fetchGHQList(preferences.GHQ_ROOT_PATH.trim()).then((ghqList) => {
       setPaths(ghqList);
@@ -27,8 +41,16 @@ export default function Command() {
 
   return (
     <List isLoading={isLoading} onSearchTextChange={handleSearchTextChange}>
-      {paths.map((path) => (
-        <List.Item key={path} title={path} />
+      {paths.map((path, index) => (
+        <List.Item
+          key={path}
+          title={path}
+          actions={
+            <ActionPanel>
+              <Action title="Open VSCode" onAction={() => handleAction(index)} />
+            </ActionPanel>
+          }
+        />
       ))}
     </List>
   );
