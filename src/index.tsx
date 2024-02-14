@@ -2,18 +2,20 @@ import { useCallback, useEffect, useState } from "react";
 import { Action, ActionPanel, List, getPreferenceValues } from "@raycast/api";
 import { fetchGHQList } from "./ghq";
 import { launchVSCode } from "./vscode";
+import { Fzf } from "fzf";
 
 export default function Command() {
   const preferences = getPreferenceValues<{ GHQ_ROOT_PATH: string }>();
   const [paths, setPaths] = useState<string[]>([]);
   const [result, setResult] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const fzf = new Fzf(result);
 
   const handleSearchTextChange = useCallback(
     (text: string) => {
       // fuzzy search
-      const paths = result.filter((path) => path.includes(text));
-      setPaths(paths);
+      const paths = fzf.find(text);
+      setPaths(paths.map((p) => p.item));
     },
     [paths],
   );
