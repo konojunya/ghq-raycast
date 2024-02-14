@@ -1,8 +1,22 @@
 import { useCallback, useEffect, useState } from "react";
-import { Action, ActionPanel, List, getPreferenceValues } from "@raycast/api";
+import {
+  Action,
+  ActionPanel,
+  List,
+  showToast,
+  getPreferenceValues,
+  Toast,
+  closeMainWindow,
+  clearSearchBar,
+} from "@raycast/api";
 import { fetchGHQList } from "./ghq";
 import { launchVSCode } from "./vscode";
 import { Fzf } from "fzf";
+
+async function cleanup() {
+  await clearSearchBar();
+  await closeMainWindow({ clearRootSearch: true });
+}
 
 export default function Command() {
   const preferences = getPreferenceValues<{ GHQ_ROOT_PATH: string }>();
@@ -26,8 +40,10 @@ export default function Command() {
 
       try {
         await launchVSCode(projectPath);
+        await cleanup();
       } catch (e) {
-        console.error(e);
+        const toast = await showToast({ style: Toast.Style.Failure, title: "Can not open VSCode" });
+        await toast.show();
       }
     },
     [paths],
