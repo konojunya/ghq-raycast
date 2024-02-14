@@ -1,9 +1,9 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "ghq-vscode",
-  "title": "GHQ VSCode",
+  "name": "ghq",
+  "title": "ghq",
   "description": "Control Visual Studio Code directly from Raycast - Search from ghq list and open project.",
-  "icon": "command-icon.png",
+  "icon": "ghq-raycast.png",
   "author": "konojunya",
   "categories": [
     "System"

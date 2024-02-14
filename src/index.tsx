@@ -12,6 +12,7 @@ import {
 import { fetchGHQList } from "./ghq";
 import { launchVSCode } from "./vscode";
 import { Fzf } from "fzf";
+import { launchTerminal } from "./terminal";
 
 async function cleanup() {
   await clearSearchBar();
@@ -34,7 +35,7 @@ export default function Command() {
     [paths],
   );
 
-  const handleAction = useCallback(
+  const handleOpenVSCode = useCallback(
     async (index: number) => {
       const projectPath = `${preferences.GHQ_ROOT_PATH}/${paths[index]}`;
 
@@ -43,6 +44,21 @@ export default function Command() {
         await cleanup();
       } catch (e) {
         const toast = await showToast({ style: Toast.Style.Failure, title: "Can not open VSCode" });
+        await toast.show();
+      }
+    },
+    [paths],
+  );
+
+  const handleOpenTerminal = useCallback(
+    async (index: number) => {
+      const projectPath = `${preferences.GHQ_ROOT_PATH}/${paths[index]}`;
+
+      try {
+        await launchTerminal(projectPath);
+        await cleanup();
+      } catch (e) {
+        const toast = await showToast({ style: Toast.Style.Failure, title: "Can not open Terminal" });
         await toast.show();
       }
     },
@@ -65,7 +81,8 @@ export default function Command() {
           title={path}
           actions={
             <ActionPanel>
-              <Action title="Open VSCode" onAction={() => handleAction(index)} />
+              <Action icon="vscode.png" title="Open VSCode" onAction={() => handleOpenVSCode(index)} />
+              <Action icon="terminal.png" title="Open Terminal" onAction={() => handleOpenTerminal(index)} />
             </ActionPanel>
           }
         />
