@@ -1,5 +1,7 @@
 # ghq Extension for Raycast
 
+![](metadata/ghq-1.png)
+
 Raycast Extension for [ghq](https://github.com/x-motemen/ghq) `list` and `get`.
 
 ghq extension is currently no plans to implement `create`, `rm`, and `root` because there are few situations where you want to use Raycast to perform these functions.
