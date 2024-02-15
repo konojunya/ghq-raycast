@@ -14,7 +14,7 @@
     {
       "name": "search",
       "title": "Search Your Repositories",
-      "description": "Search and open project from Visual Studio Code.",
+      "description": "Open the search results in VSCode or another application. For example, Finder or your terminal app",
       "mode": "view"
     }
   ],
@@ -23,10 +23,11 @@
       "label": "ghq root path",
       "name": "GHQ_ROOT_PATH",
       "title": "ghq root path",
-      "description": "Your ghq root path.\nuse `ghq root` command to get the path.\n\nDO NOT use `~` to represent your home directory. Use the full path instead.",
+      "description": "Your ghq root path. use `ghq root` command to get the path.",
       "type": "textfield",
       "required": true,
-      "placeholder": "/User/username/ghq/src"
+      "placeholder": "/User/username/ghq/src",
+      "default": "~/ghq/src"
     }
   ],
   "dependencies": {

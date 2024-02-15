@@ -10,8 +10,20 @@ async function cleanup() {
   await closeMainWindow({ clearRootSearch: true });
 }
 
-export default function Command() {
+function getGHQRootPath() {
   const preferences = getPreferenceValues<{ GHQ_ROOT_PATH: string }>();
+  const root = preferences.GHQ_ROOT_PATH.trim();
+
+  // replace ~ with the actual home directory
+  if (root.startsWith("~")) {
+    return root.replace("~", String(process.env.HOME));
+  }
+
+  return root;
+}
+
+export default function Command() {
+  const rootPath = getGHQRootPath();
   const [paths, setPaths] = useState<string[]>([]);
   const [result, setResult] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +40,7 @@ export default function Command() {
 
   const handleOpenVSCode = useCallback(
     async (index: number) => {
-      const projectPath = `${preferences.GHQ_ROOT_PATH}/${paths[index]}`;
+      const projectPath = `${rootPath}/${paths[index]}`;
 
       try {
         await launchVSCode(projectPath);
@@ -41,7 +53,7 @@ export default function Command() {
   );
 
   useEffect(() => {
-    fetchGHQList(preferences.GHQ_ROOT_PATH.trim()).then((ghqList) => {
+    fetchGHQList(rootPath).then((ghqList) => {
       setPaths(ghqList);
       setResult(ghqList);
       setIsLoading(false);
@@ -57,7 +69,7 @@ export default function Command() {
           actions={
             <ActionPanel>
               <Action icon="vscode.png" title="Open VSCode" onAction={() => handleOpenVSCode(index)} />
-              <Action.OpenWith title="Open Other App" path={`${preferences.GHQ_ROOT_PATH}/${paths[index]}`} />
+              <Action.OpenWith title="Open Other App" path={`${rootPath}/${paths[index]}`} />
             </ActionPanel>
           }
         />
