@@ -6,12 +6,13 @@
   "icon": "ghq-raycast.png",
   "author": "konojunya",
   "categories": [
-    "System"
+    "System",
+    "Developer Tools"
   ],
   "license": "MIT",
   "commands": [
     {
-      "name": "index",
+      "name": "search",
       "title": "Search Your Repositories",
       "description": "Search and open project from Visual Studio Code.",
       "mode": "view"
@@ -19,6 +20,7 @@
   ],
   "preferences": [
     {
+      "label": "ghq root path",
       "name": "GHQ_ROOT_PATH",
       "title": "ghq root path",
       "description": "Your ghq root path.\nuse `ghq root` command to get the path.\n\nDO NOT use `~` to represent your home directory. Use the full path instead.",
