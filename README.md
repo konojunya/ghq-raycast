@@ -52,3 +52,9 @@ npm run dev
 ```
 
 The tests cover command arguments, path handling, and error reporting. When ghq is installed, they also clone and update a temporary local Git repository without accessing a remote host. Set `GHQ_TEST_BINARY` to test a custom ghq installation.
+
+### Quick Get
+
+Pass a repository URL in the **Get Repository** command argument and press Enter to start cloning immediately with the default options. Launch the command without an argument to use the options form.
+
+You can also add **Get Repository** in Raycast’s **Manage Fallback Commands** settings. It receives the root search text and starts cloning when selected. The selected root-search result determines what Enter runs; URLs may also match Raycast’s built-in browser action.

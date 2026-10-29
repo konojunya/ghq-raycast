@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Action,
   ActionPanel,
@@ -7,6 +7,7 @@ import {
   Icon,
   launchCommand,
   LaunchType,
+  LaunchProps,
   showToast,
   Toast,
 } from "@raycast/api";
@@ -21,11 +22,13 @@ interface Values {
   update: boolean;
 }
 
-export default function Command() {
+export default function Command(props: LaunchProps<{ arguments: { repository?: string } }>) {
+  const initialRepository = props.arguments.repository || props.fallbackText || "";
+  const launched = useRef(false);
   const submitting = useRef(false);
   const [isLoading, setIsLoading] = useState(false);
   const { handleSubmit, itemProps } = useForm<Values>({
-    initialValues: { repository: "", ssh: false, shallow: false, update: false },
+    initialValues: { repository: initialRepository, ssh: false, shallow: false, update: false },
     validation: { repository: (value) => validateRepository(value || "") },
     async onSubmit(values) {
       if (submitting.current) return;
@@ -67,6 +70,12 @@ export default function Command() {
       }
     },
   });
+
+  useEffect(() => {
+    if (launched.current || !initialRepository.trim()) return;
+    launched.current = true;
+    void handleSubmit({ repository: initialRepository, ssh: false, shallow: false, update: false });
+  }, [handleSubmit, initialRepository]);
 
   return (
     <Form
