@@ -30,14 +30,6 @@
           "required": false,
           "placeholder": "/opt/homebrew/bin/ghq"
         }
-      ],
-      "arguments": [
-        {
-          "name": "repository",
-          "type": "text",
-          "placeholder": "Repository URL or owner/repository",
-          "required": false
-        }
       ]
     }
   ],
