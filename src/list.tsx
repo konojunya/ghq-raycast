@@ -1,25 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
-import { Action, ActionPanel, List, getPreferenceValues, closeMainWindow, clearSearchBar } from "@raycast/api";
+import { Action, ActionPanel, List, closeMainWindow, clearSearchBar } from "@raycast/api";
 import { fetchGHQList } from "./ghq";
 import { launchVSCode } from "./vscode";
 import { Fzf } from "fzf";
 import { showFailureToast } from "@raycast/utils";
+import { getGHQRootPath } from "./preferences";
 
 async function cleanup() {
   await clearSearchBar();
   await closeMainWindow({ clearRootSearch: true });
-}
-
-function getGHQRootPath() {
-  const preferences = getPreferenceValues<{ GHQ_ROOT_PATH: string }>();
-  const root = preferences.GHQ_ROOT_PATH.trim();
-
-  // replace ~ with the actual home directory
-  if (root.startsWith("~")) {
-    return root.replace("~", String(process.env.HOME));
-  }
-
-  return root;
 }
 
 export default function Command() {
@@ -68,8 +57,8 @@ export default function Command() {
           title={path}
           actions={
             <ActionPanel>
-              <Action icon="vscode.png" title="Open VSCode" onAction={() => handleOpenVSCode(index)} />
-              <Action.OpenWith title="Open Other App" path={`${rootPath}/${paths[index]}`} />
+              <Action icon="vscode.png" title="Open VS Code" onAction={() => handleOpenVSCode(index)} />
+              <Action.OpenWith title="Open in Another App" path={`${rootPath}/${paths[index]}`} />
             </ActionPanel>
           }
         />
